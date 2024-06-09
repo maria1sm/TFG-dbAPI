@@ -41,3 +41,15 @@ jobs:
       - name: Build and push Docker image for Python App
         run: |
           docker build --build-arg AZURE_MYSQL_USER="${AZURE_MYSQL_USER}" \--build-arg AZURE_MYSQL_PASSWORD="${AZURE_MYSQL_PASSWORD}" \--build-arg AZURE_MYSQL_HOST="${AZURE_MYSQL_HOST}" \--build-arg AZURE_MYSQL_PORT="${AZURE_MYSQL_PORT}" \--build-arg AZURE_MYSQL_DATABASE="${AZURE_MYSQL_DATABASE}" \--build-arg SQLALCHEMY_DATABASE_URL="${SQLALCHEMY_DATABASE_URL}" \-t ${{ secrets.AZURE_REGISTRY_SERVER }}/dbapi:release -f Dockerfile --push .
+      
+      - name: Configure kubectl
+        uses: azure/k8s-set-context@v1
+        with:
+            kubeconfig: ${{ secrets.KUBE_CONFIG }}
+  
+      - name: Kubernetes manifests on develop
+        if: github.ref == 'refs/heads/release'
+        run: |
+          kubectl apply -f manifest/release-namespace.yml
+          kubectl apply -f manifest/release-deployment.yml
+          kubectl apply -f manifest/release-services.yml
