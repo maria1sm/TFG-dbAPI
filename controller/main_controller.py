@@ -4,11 +4,15 @@ from connection.connect import get_db
 from service.user_service import UserService
 from schemas.users import UserCreate, UserResponse
 from typing import List
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 router = APIRouter()
 
 def verify_header(authorization: str = Header(...)):
-    if authorization != "Joaquin_Apruebame01":
+    if authorization != os.getenv("AUTH_HEADER"):
         raise HTTPException(status_code=403, detail="Forbidden")
 
 @router.get("/{user_id}", response_model=UserResponse, dependencies=[Depends(verify_header)])
