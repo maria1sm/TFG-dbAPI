@@ -17,6 +17,7 @@ jobs:
       AZURE_MYSQL_PORT: ${{ secrets.AZURE_MYSQL_PORT }}
       AZURE_MYSQL_DATABASE: ${{ secrets.AZURE_MYSQL_DATABASE }}
       SQLALCHEMY_DATABASE_URL: ${{ secrets.SQLALCHEMY_DATABASE_URL }}
+      AUTH_HEADER: ${{ secrets.AUTH_HEADER }}
 
     steps:
 
